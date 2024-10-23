@@ -1,4 +1,6 @@
 // lib/screens/main_menu_screen.dart
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:cn_project/screens/event_list_screen.dart';
 import 'package:cn_project/screens/venue_list_screen.dart';

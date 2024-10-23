@@ -1,5 +1,3 @@
-// lib/screens/venue_booking_screen.dart
-
 import 'package:flutter/material.dart';
 import '../models/venue.dart';
 import '../services/venue_service.dart';
@@ -10,7 +8,6 @@ class VenueBookingScreen extends StatefulWidget {
   const VenueBookingScreen({required this.venue, super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _VenueBookingScreenState createState() => _VenueBookingScreenState();
 }
 
@@ -18,14 +15,13 @@ class _VenueBookingScreenState extends State<VenueBookingScreen> {
   final _formKey = GlobalKey<FormState>();
   final _bookedByController = TextEditingController();
   final _bookingDurationController = TextEditingController();
-  final _eventNameController = TextEditingController(); // Event name controller
-  final _eventDescriptionController =
-      TextEditingController(); // Event description controller
+  final _eventNameController = TextEditingController();
+  final _eventDescriptionController = TextEditingController();
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
   final VenueService _venueService = VenueService();
 
-  bool _isBooking = false; // For loading spinner during booking
+  bool _isBooking = false;
 
   // Date and Time picker method
   Future<void> _selectDate() async {
@@ -47,6 +43,11 @@ class _VenueBookingScreenState extends State<VenueBookingScreen> {
         });
       }
     }
+  }
+
+  // Method to combine the selected date and time into a DateTime object
+  DateTime _combineDateAndTime(DateTime date, TimeOfDay time) {
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
   @override
@@ -139,7 +140,7 @@ class _VenueBookingScreenState extends State<VenueBookingScreen> {
     );
   }
 
-  // Book Venue method with loading state
+  // Book Venue method with loading state and complete data submission
   Future<void> _bookVenue() async {
     if (_selectedDate == null || _selectedTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -152,28 +153,23 @@ class _VenueBookingScreenState extends State<VenueBookingScreen> {
       _isBooking = true; // Set loading state
     });
 
-    final DateTime startDateTime = DateTime(
-      _selectedDate!.year,
-      _selectedDate!.month,
-      _selectedDate!.day,
-      _selectedTime!.hour,
-      _selectedTime!.minute,
-    );
+    final DateTime startDateTime =
+        _combineDateAndTime(_selectedDate!, _selectedTime!);
 
     try {
       await _venueService.bookVenue(
         widget.venue.id,
-        _bookedByController.text,
-        DateTime.now(),
-        int.parse(_bookingDurationController.text),
-        _eventNameController.text,
-        _eventDescriptionController.text,
-        startDateTime,
+        _bookedByController.text, // Person booking the venue
+        DateTime.now(), // Current timestamp as 'booked_at'
+        int.parse(_bookingDurationController.text), // Duration of booking
+        _eventNameController.text, // Event name
+        _eventDescriptionController.text, // Event description
+        startDateTime, // Combined start date and time
       );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Venue booked successfully!')),
       );
-      Navigator.pop(context);
+      Navigator.pop(context); // Close the booking screen
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to book venue')),

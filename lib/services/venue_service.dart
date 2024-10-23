@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 import '../models/venue.dart';
 
 class VenueService {
-  static const String baseUrl = 'http://127.0.0.1:8000/api/venues';
+  static const String baseUrl =
+      'https://6d34-122-187-117-179.ngrok-free.app/api/venues';
 
   // Fetch the list of venues
   Future<List<Venue>> getVenues() async {
@@ -19,14 +20,25 @@ class VenueService {
 
   // Book a venue
   Future<void> bookVenue(
-      int venueId,
-      String bookedBy,
-      DateTime bookedAt,
-      int bookingDuration,
-      String eventName,
-      String eventDescription,
-      DateTime startDateTime) async {
+    int venueId,
+    String bookedBy,
+    DateTime bookedAt,
+    int bookingDuration,
+    String eventName, // Add event name
+    String eventDescription, // Add event description
+    DateTime startTime, // Add start time
+  ) async {
     final url = '$baseUrl/$venueId/book/';
+
+    // Print out the data being sent for debugging
+    print({
+      'booked_by': bookedBy,
+      'booked_at': bookedAt.toIso8601String().split('.').first,
+      'booking_duration': bookingDuration,
+      'event_name': eventName,
+      'event_description': eventDescription,
+      'start_time': startTime.toIso8601String().split('.').first,
+    });
 
     final response = await http.patch(
       Uri.parse(url),
@@ -39,14 +51,12 @@ class VenueService {
         'booking_duration': bookingDuration,
         'event_name': eventName,
         'event_description': eventDescription,
-        'start_time': startDateTime
-            .toIso8601String()
-            .split('.')
-            .first, // Use combined DateTime
+        'start_time': startTime.toIso8601String().split('.').first,
       }),
     );
 
     if (response.statusCode != 200) {
+      print('Response: ${response.body}');
       throw Exception('Failed to book venue');
     }
   }

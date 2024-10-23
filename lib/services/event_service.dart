@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import '../models/event.dart';
 
 class EventService {
-  static const String baseUrl = 'http://127.0.0.1:8000/api/events';
+  static const String baseUrl =
+      'https://6d34-122-187-117-179.ngrok-free.app/api/events';
 
   Future<List<Event>> getEvents() async {
     final response = await http.get(Uri.parse(baseUrl));
