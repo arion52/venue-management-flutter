@@ -3,8 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/venue.dart';
 
 class VenueService {
-  static const String baseUrl =
-      'https://6d34-122-187-117-179.ngrok-free.app/api/venues';
+  static const String baseUrl = 'http://127.0.0.1:8000/api/venues';
 
   // Fetch the list of venues
   Future<List<Venue>> getVenues() async {
@@ -30,16 +29,6 @@ class VenueService {
   ) async {
     final url = '$baseUrl/$venueId/book/';
 
-    // Print out the data being sent for debugging
-    print({
-      'booked_by': bookedBy,
-      'booked_at': bookedAt.toIso8601String().split('.').first,
-      'booking_duration': bookingDuration,
-      'event_name': eventName,
-      'event_description': eventDescription,
-      'start_time': startTime.toIso8601String().split('.').first,
-    });
-
     final response = await http.patch(
       Uri.parse(url),
       headers: <String, String>{
@@ -56,8 +45,8 @@ class VenueService {
     );
 
     if (response.statusCode != 200) {
-      print('Response: ${response.body}');
-      throw Exception('Failed to book venue');
+      // print('Response: ${response.body}');
+      throw Exception(response.body);
     }
   }
 }

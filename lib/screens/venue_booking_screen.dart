@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/venue.dart';
 import '../services/venue_service.dart';
+import 'dart:convert';
 
 class VenueBookingScreen extends StatefulWidget {
   final Venue venue;
@@ -8,6 +9,7 @@ class VenueBookingScreen extends StatefulWidget {
   const VenueBookingScreen({required this.venue, super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _VenueBookingScreenState createState() => _VenueBookingScreenState();
 }
 
@@ -171,8 +173,32 @@ class _VenueBookingScreenState extends State<VenueBookingScreen> {
       );
       Navigator.pop(context); // Close the booking screen
     } catch (e) {
+      String errorMessage = e.toString();
+
+      try {
+        // print("hi in try");
+        // print("Error message before parsing: $errorMessage");
+
+        // Remove any "Exception: " prefix if it exists
+        if (errorMessage.startsWith("Exception: ")) {
+          errorMessage = errorMessage.replaceFirst("Exception: ", "");
+        }
+
+        // Now, check if it starts with '{' and ends with '}' to confirm JSON format
+        if (errorMessage.trim().startsWith("{") &&
+            errorMessage.trim().endsWith("}")) {
+          final errorJson = jsonDecode(errorMessage);
+          // print("Parsed JSON error message: ${errorJson['error']}");
+          errorMessage = errorJson['error'] ?? errorMessage;
+        } else {
+          print("Error message is not in JSON format.");
+        }
+      } catch (_) {
+        // Leave the original error message if parsing fails
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to book venue')),
+        SnackBar(content: Text(errorMessage)),
       );
     } finally {
       setState(() {
