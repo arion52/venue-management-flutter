@@ -4,9 +4,9 @@ import '../models/venue.dart';
 
 class VenueService {
   // static const String baseUrl = 'http://127.0.0.1:8000/api/venues';  // For local development
-  // static const String baseUrl ='http://10.0.2.2:8000/api/venues'; // For Android Emulator
   static const String baseUrl =
-      'http://192.168.0.102:8000/api/venues'; // For physical device
+      'http://10.0.2.2:8000/api/venues'; // For Android Emulator
+  // static const String baseUrl = 'http://192.168.0.102:8000/api/venues'; // For physical device
 
   // Fetch the list of venues
   Future<List<Venue>> getVenues() async {

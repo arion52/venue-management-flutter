@@ -39,12 +39,23 @@ class _VenueListScreenState extends State<VenueListScreen> {
                 final venue = venues[index];
                 return ListTile(
                   title: Text(venue.name), // Display the venue's name
+                  subtitle: venue.isBooked
+                      ? const Text('Booked',
+                          style: TextStyle(color: Colors.red))
+                      : const Text('Available',
+                          style: TextStyle(color: Colors.green)),
                   trailing: ElevatedButton(
-                    onPressed: () {
-                      _navigateToBooking(
-                          context, venue); // Navigate to booking screen
-                    },
-                    child: const Text('Book Venue'),
+                    onPressed: venue.isBooked
+                        ? null // Disable button if the venue is booked
+                        : () {
+                            _navigateToBooking(
+                                context, venue); // Navigate to booking screen
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          venue.isBooked ? Colors.grey : Colors.blue,
+                    ),
+                    child: Text(venue.isBooked ? 'Booked' : 'Book Venue'),
                   ),
                 );
               },
