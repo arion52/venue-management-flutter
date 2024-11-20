@@ -131,16 +131,4 @@ This software is designed to optimize venue management in academic institutions 
 We welcome contributions to enhance the system!  
 1. Fork the repository.  
 2. Create a feature branch.  
-3. Commit changes and submit a pull request.  
-
----
-
-## License  
-This project is licensed under the [MIT License](LICENSE).  
-
----
-
-## Contact  
-For queries or support, contact:  
-**Bargav Krishna K H, Karthikeyan Arun, Manju Varshikha S, Aarthi G**  
-Email: support@venue-booking.com
+3. Commit changes and submit a pull request.
